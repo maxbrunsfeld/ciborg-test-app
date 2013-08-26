@@ -1,0 +1,34 @@
+---
+ssh_port: 22
+master: 54.221.244.92
+server_ssh_key: /Users/pivotal/.ssh/id_rsa_ciborg_test
+recipes:
+- pivotal_ci::jenkins
+- pivotal_ci::limited_travis_ci_environment
+- pivotal_ci
+cookbook_paths:
+- ./chef/cookbooks/
+- ./chef/travis-cookbooks/ci_environment
+- ./chef/project-cookbooks
+node_attributes:
+  travis_build_environment:
+    user: jenkins
+    group: nogroup
+    home: /var/lib/jenkins
+  nginx:
+    basic_auth_user: ci
+    basic_auth_password: cave4:lithia
+  jenkins:
+    builds:
+    - name: Test01
+      repository: git@github.com:maxbrunsfeld/ciborg-test-app.git
+      branch: master
+      command: bundle exec rspec
+      junit_publisher: true
+instance_size: c1.medium
+github_ssh_key: /Users/pivotal/.ssh/id_rsa
+security_group: ciborg
+availability_zone: us-east-1b
+aws_key: AKIAJPBQGXJB4VGHUZUQ
+aws_secret: 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
+instance_id: i-448a4c39
